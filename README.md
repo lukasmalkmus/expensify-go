@@ -5,8 +5,7 @@
 [![Build Status][build_badge]][build]
 [![Coverage Status][coverage_badge]][coverage]
 [![Go Report][report_badge]][report]
-[![GoDoc][docs_badge]][docs]
-[![Latest Release][release_badge]][release]
+[![PkgGoDev][docs_badge]][docs]
 [![License][license_badge]][license]
 [![License Status][license_status_badge]][license_status]
 
@@ -62,10 +61,8 @@ See [LICENSE](LICENSE) for more information.
 [coverage_badge]: https://img.shields.io/codecov/c/github/lukasmalkmus/expensify-go.svg?style=flat-square
 [report]: https://goreportcard.com/report/github.com/lukasmalkmus/expensify-go
 [report_badge]: https://goreportcard.com/badge/github.com/lukasmalkmus/expensify-go?style=flat-square
-[docs]: https://godoc.org/github.com/lukasmalkmus/expensify-go
+[docs]: https://github.com/lukasmalkmus/expensify-go
 [docs_badge]: https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square
-[release]: https://github.com/lukasmalkmus/expensify-go/releases
-[release_badge]: https://img.shields.io/github/release/lukasmalkmus/expensify-go.svg?style=flat-square
 [license]: https://opensource.org/licenses/MIT
 [license_badge]: https://img.shields.io/github/license/lukasmalkmus/expensify-go.svg?color=blue&style=flat-square
 [license_status]: https://app.fossa.com/projects/git%2Bgithub.com%2Flukasmalkmus%2Fexpensify-go?ref=badge_shield
