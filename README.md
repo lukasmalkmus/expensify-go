@@ -20,7 +20,8 @@
 
 ## Introduction
 
-_expensify-go_ is an opinionated client library for the Expensify API.
+_expensify-go_ is an opinionated client library for the Expensify API. I created
+it in order to add expenses which makes it the only method currently supported.
 
 ## Usage
 

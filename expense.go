@@ -6,6 +6,7 @@ import (
 
 const expenseType = "expenses"
 
+// Expense in an users account.
 type Expense struct {
 	// The name of the expense's merchant.
 	Merchant string `json:"merchant"`
@@ -37,6 +38,7 @@ type Expense struct {
 	Tax *Tax `json:"tax,omitempty"`
 }
 
+// Tax applied to an expense.
 type Tax struct {
 	// The tax RateID as defined in the policy.
 	RateID string `json:"rateID"`
