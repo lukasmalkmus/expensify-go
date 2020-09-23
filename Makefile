@@ -17,7 +17,7 @@ GOTESTSUM		:= bin/gotestsum
 COVERPROFILE	:= coverage.out
 
 # FLAGS
-GOTESTSUM_FLAGS	:= --jsonfile tests.json --junitfile junit.xml
+GOTESTSUM_FLAGS	:=
 GO_TEST_FLAGS 	:= -race -coverprofile=$(COVERPROFILE)
 
 # DEPENDENCIES
