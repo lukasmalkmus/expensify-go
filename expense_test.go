@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestExpeseService_Create(t *testing.T) {
+func TestExpenseService_Create(t *testing.T) {
 	exp := &Expense{
 		Merchant: "Apple Inc.",
 		Created:  mustTimeParse(t, layoutISO, "2020-09-01"),
@@ -50,8 +50,42 @@ func TestExpeseService_Create(t *testing.T) {
 	client, teardown := setup(t, hf)
 	defer teardown()
 
-	err := client.Expense.Create(context.Background(), "dev@example.com", exp)
+	_, err := client.Expense.Create(context.Background(), "dev@example.com", exp)
 	require.NoError(t, err)
+}
+
+func TestUnmarshalTransactionList(t *testing.T) {
+	var payload = `{
+		"responseCode" : 200,
+		"transactionList" : [
+			{
+				"amount" : 1234,
+				"merchant" : "Name Of Merchant 1",
+				"created" : "2016-01-01",
+				"transactionID" : "6720309558248016",
+				"currency" : "USD",
+				"reportID":65343384
+			},
+			{
+				"amount" : 2211,
+				"merchant" : "Name Of Merchant 2",
+				"created" : "2016-01-31",
+				"transactionID" : "6720309558248017",
+				"currency" : "CAD",
+				"reportID":65343384
+			}
+		]
+	}`
+
+	res := new(CreateResponse)
+	err := json.Unmarshal([]byte(payload), res)
+	require.NoError(t, err)
+	assert.Len(t, res.TransactionList, 2)
+	assert.EqualValues(t, "6720309558248017", res.TransactionList[1].TransactionID)
+
+	date, err := time.Parse(layoutISO, "2016-01-01")
+	require.NoError(t, err)
+	assert.EqualValues(t, NewTime(date), res.TransactionList[0].Created)
 }
 
 func mustTimeParse(t *testing.T, layout, value string) Time {

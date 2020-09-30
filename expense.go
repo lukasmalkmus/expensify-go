@@ -31,11 +31,19 @@ type Expense struct {
 	// An expense comment. Optional.
 	Comment string `json:"comment,omitempty"`
 	// The ID of the report you want to attach the expense to. Optional.
-	ReportID string `json:"reportID,omitempty"`
+	ReportID int `json:"reportID,omitempty"`
 	// The ID of the policy the tax belongs to. Optional.
 	PolicyID string `json:"policyID,omitempty"`
 	// Optional.
 	Tax *Tax `json:"tax,omitempty"`
+}
+
+// SubmittedExpense contains the details of the submitted expenses
+type SubmittedExpense struct {
+	Expense
+
+	// The transaction ID for the submitted expense.
+	TransactionID string `json:"transactionID,omitempty"`
 }
 
 // Tax applied to an expense.
@@ -55,10 +63,18 @@ type createRequest struct {
 	TransactionList []*Expense `json:"transactionList"`
 }
 
+// CreateResponse return on expense creation
+type CreateResponse struct {
+	// The status code of the request.
+	ResponseCode int `json:"responseCode"`
+	// List of expenses.
+	TransactionList []*SubmittedExpense `json:"transactionList"`
+}
+
 // ExpenseService bundles all operations on expenses.
 type ExpenseService interface {
 	// Create one or more expenses.
-	Create(ctx context.Context, employeeEmail string, expenses ...*Expense) error
+	Create(ctx context.Context, employeeEmail string, expenses ...*Expense) (*CreateResponse, error)
 }
 
 var _ ExpenseService = (*expenseService)(nil)
@@ -68,14 +84,15 @@ type expenseService struct {
 }
 
 // Create one or more expenses.
-func (s *expenseService) Create(ctx context.Context, employeeEmail string, expenses ...*Expense) error {
+func (s *expenseService) Create(ctx context.Context, employeeEmail string, expenses ...*Expense) (*CreateResponse, error) {
 	req := &createRequest{
 		EmployeeEmail:   employeeEmail,
 		TransactionList: expenses,
 	}
 
-	if err := s.client.call(ctx, jobTypeCreate, expenseType, req, nil); err != nil {
-		return err
+	res := new(CreateResponse)
+	if err := s.client.call(ctx, jobTypeCreate, expenseType, req, res); err != nil {
+		return nil, err
 	}
-	return nil
+	return res, nil
 }
