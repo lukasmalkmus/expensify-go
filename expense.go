@@ -2,6 +2,7 @@ package expensify
 
 import (
 	"context"
+	"errors"
 )
 
 const expenseType = "expenses"
@@ -94,5 +95,10 @@ func (s *expenseService) Create(ctx context.Context, employeeEmail string, expen
 	if err := s.client.call(ctx, jobTypeCreate, expenseType, req, res); err != nil {
 		return nil, err
 	}
+
+	if len(res.TransactionList) == 0 {
+		return nil, errors.New("missing transaction list")
+	}
+
 	return res, nil
 }
