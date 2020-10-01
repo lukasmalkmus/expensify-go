@@ -34,6 +34,25 @@ go get github.com/lukasmalkmus/expensify-go
 ### Usage
 
 ```go
+// Get credentials from https://www.expensify.com/tools/integrations.
+client, err := expensify.NewClient("XXX-REPLACE-ME-XXX", "XXX-REPLACE-ME-XXX")
+if err != nil {
+    // Handle error!
+}
+
+expense := &expensify.Expense{
+    Merchant: "Apple Inc.",
+    Created:  expensify.NewTime(time.Now()),
+    Amount:   99,
+    Currency: "USD",
+}
+
+res, err := client.Expense.Create(context.TODO(), "you@example.com", []*expensify.Expense{exp})
+if err != nil {
+    // Handle error!
+}
+
+fmt.Println(res[0].TransactionID)
 ```
 
 ## Contributing
