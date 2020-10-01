@@ -2,12 +2,11 @@ package expensify
 
 import (
 	"context"
-	"errors"
 )
 
-const expenseType = "expenses"
+const inputTypeExpenses = "expenses"
 
-// Expense in an users account.
+// Expense is an Expensify expense.
 type Expense struct {
 	// The name of the expense's merchant.
 	Merchant string `json:"merchant"`
@@ -39,14 +38,6 @@ type Expense struct {
 	Tax *Tax `json:"tax,omitempty"`
 }
 
-// SubmittedExpense contains the details of the submitted expenses
-type SubmittedExpense struct {
-	Expense
-
-	// The transaction ID for the submitted expense.
-	TransactionID string `json:"transactionID,omitempty"`
-}
-
 // Tax applied to an expense.
 type Tax struct {
 	// The tax RateID as defined in the policy.
@@ -57,25 +48,31 @@ type Tax struct {
 	Amount int `json:"amount,omitempty"`
 }
 
+// SubmittedExpense is an Expensify expense which has been submitted to
+// Expensify and contains additional details.
+type SubmittedExpense struct {
+	Expense
+
+	// The transaction ID for the submitted expense.
+	TransactionID string `json:"transactionID,omitempty"`
+}
+
 type createRequest struct {
 	// The expenses will be created in this account.
 	EmployeeEmail string `json:"employeeEmail"`
-	// List of expenses.
+	// List of expenses to submit.
 	TransactionList []*Expense `json:"transactionList"`
 }
 
-// CreateResponse return on expense creation
-type CreateResponse struct {
-	// The status code of the request.
-	ResponseCode int `json:"responseCode"`
-	// List of expenses.
+type createResponse struct {
+	// List of submitted expenses.
 	TransactionList []*SubmittedExpense `json:"transactionList"`
 }
 
 // ExpenseService bundles all operations on expenses.
 type ExpenseService interface {
-	// Create one or more expenses.
-	Create(ctx context.Context, employeeEmail string, expenses ...*Expense) (*CreateResponse, error)
+	// Create submits expenses to the given account.
+	Create(ctx context.Context, employeeEmail string, expenses []*Expense) ([]*SubmittedExpense, error)
 }
 
 var _ ExpenseService = (*expenseService)(nil)
@@ -84,21 +81,17 @@ type expenseService struct {
 	client *Client
 }
 
-// Create one or more expenses.
-func (s *expenseService) Create(ctx context.Context, employeeEmail string, expenses ...*Expense) (*CreateResponse, error) {
+// Create submits expenses to the given account.
+func (s *expenseService) Create(ctx context.Context, employeeEmail string, expenses []*Expense) ([]*SubmittedExpense, error) {
 	req := &createRequest{
 		EmployeeEmail:   employeeEmail,
 		TransactionList: expenses,
 	}
 
-	res := new(CreateResponse)
-	if err := s.client.call(ctx, jobTypeCreate, expenseType, req, res); err != nil {
+	var res createResponse
+	if err := s.client.call(ctx, jobTypeCreate, inputTypeExpenses, req, &res); err != nil {
 		return nil, err
 	}
 
-	if len(res.TransactionList) == 0 {
-		return nil, errors.New("missing transaction list")
-	}
-
-	return res, nil
+	return res.TransactionList, nil
 }

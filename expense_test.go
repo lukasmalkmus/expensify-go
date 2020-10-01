@@ -18,6 +18,7 @@ func TestExpenseService_Create(t *testing.T) {
 		Created:  mustTimeParse(t, layoutISO, "2020-09-01"),
 		Amount:   99,
 		Currency: "EUR",
+		ReportID: 1234,
 	}
 
 	hf := func(w http.ResponseWriter, r *http.Request) {
@@ -41,95 +42,40 @@ func TestExpenseService_Create(t *testing.T) {
 				assert.EqualValues(t, "2020-09-01", tl1["created"])
 				assert.EqualValues(t, 99, tl1["amount"])
 				assert.EqualValues(t, "EUR", tl1["currency"])
+				assert.EqualValues(t, 1234, tl1["reportID"])
 			}
 		}
 
-		_, _ = fmt.Fprint(w, `{
+		_, err = fmt.Fprint(w, `{
 			"responseCode" : 200,
 			"transactionList" : [
 				{
-					"amount" : 99,
 					"merchant" : "Apple Inc.",
 					"created" : "2020-09-01",
+					"amount" : 99,
 					"transactionID" : "82827382377292",
 					"currency" : "EUR",
-					"reportID" : 238939928
+					"reportID" : 1234
 				}
 			]
 		}`)
+		require.NoError(t, err)
 	}
 
 	client, teardown := setup(t, hf)
 	defer teardown()
 
-	_, err := client.Expense.Create(context.Background(), "dev@example.com", exp)
+	res, err := client.Expense.Create(context.Background(), "dev@example.com", []*Expense{exp})
 	require.NoError(t, err)
-}
 
-func TestExpenseService_CreateWithResponseSuccess(t *testing.T) {
-	exp := &Expense{
-		Merchant: "Apple Inc.",
-		Created:  mustTimeParse(t, layoutISO, "2020-09-01"),
-		Amount:   99,
-		Currency: "EUR",
+	if assert.NotEmpty(t, res) {
+		assert.EqualValues(t, exp.Merchant, res[0].Merchant)
+		assert.EqualValues(t, exp.Created, res[0].Created)
+		assert.EqualValues(t, exp.Amount, res[0].Amount)
+		assert.EqualValues(t, "82827382377292", res[0].TransactionID)
+		assert.EqualValues(t, exp.Currency, res[0].Currency)
+		assert.EqualValues(t, exp.ReportID, res[0].ReportID)
 	}
-
-	hf := func(w http.ResponseWriter, r *http.Request) {
-		_, _ = fmt.Fprint(w, `
-		{
-			"responseCode" : 200,
-			"transactionList" : [
-				{
-					"amount" : 1234,
-					"merchant" : "Name Of Merchant 1",
-					"created" : "2016-01-01",
-					"transactionID" : "6720309558248016",
-					"currency" : "USD",
-					"reportID":65343384
-				},
-				{
-					"amount" : 2211,
-					"merchant" : "Name Of Merchant 2",
-					"created" : "2016-01-31",
-					"transactionID" : "6720309558248017",
-					"currency" : "CAD",
-					"reportID":65343384
-				}
-			]
-		}`)
-	}
-
-	client, teardown := setup(t, hf)
-	defer teardown()
-
-	res, err := client.Expense.Create(context.Background(), "dev@example.com", exp)
-	require.NoError(t, err)
-	assert.Equal(t, 200, res.ResponseCode)
-	assert.Len(t, res.TransactionList, 2)
-	assert.EqualValues(t, "6720309558248016", res.TransactionList[0].TransactionID)
-	date, err := time.Parse(layoutISO, "2016-01-31")
-	require.NoError(t, err)
-	assert.EqualValues(t, NewTime(date), res.TransactionList[1].Created)
-}
-
-func TestExpenseService_CreateWithResponseFailure(t *testing.T) {
-	exp := &Expense{
-		Merchant: "Apple Inc.",
-		Created:  mustTimeParse(t, layoutISO, "2020-09-01"),
-		Amount:   99,
-		Currency: "EUR",
-	}
-
-	hf := func(w http.ResponseWriter, r *http.Request) {
-		_, _ = fmt.Fprint(w, "")
-	}
-
-	client, teardown := setup(t, hf)
-	defer teardown()
-
-	res, err := client.Expense.Create(context.Background(), "dev@example.com", exp)
-	assert.Error(t, err)
-	assert.Equal(t, (*CreateResponse)(nil), res)
 }
 
 func mustTimeParse(t *testing.T, layout, value string) Time {
