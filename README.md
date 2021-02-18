@@ -75,17 +75,17 @@ See [LICENSE](LICENSE) for more information.
 
 <!-- Badges -->
 
-[build]: https://travis-ci.com/lukasmalkmus/expensify-go
-[build_badge]: https://img.shields.io/travis/com/lukasmalkmus/expensify-go.svg?style=flat-square
+[gopkg]: https://pkg.go.dev/github.com/lukasmalkmus/expensify-go
+[gopkg_badge]: https://img.shields.io/badge/doc-reference-007d9c?logo=go&logoColor=white&style=flat-square
+[go_workflow]: https://github.com/lukasmalkmus/expensify-go/actions?query=workflow%3Ago
+[go_workflow_badge]: https://img.shields.io/github/workflow/status/lukasmalkmus/expensify-go/go?style=flat-square&ghcache=unused
 [coverage]: https://codecov.io/gh/lukasmalkmus/expensify-go
-[coverage_badge]: https://img.shields.io/codecov/c/github/lukasmalkmus/expensify-go.svg?style=flat-square
+[coverage_badge]: https://img.shields.io/codecov/c/github/lukasmalkmus/expensify-go.svg?style=flat-square&ghcache=unused
 [report]: https://goreportcard.com/report/github.com/lukasmalkmus/expensify-go
-[report_badge]: https://goreportcard.com/badge/github.com/lukasmalkmus/expensify-go?style=flat-square
-[docs]: https://github.com/lukasmalkmus/expensify-go
-[docs_badge]: https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square
+[report_badge]: https://goreportcard.com/badge/github.com/lukasmalkmus/expensify-go?style=flat-square&ghcache=unused
+[release]: https://github.com/lukasmalkmus/expensify-go/releases/latest
+[release_badge]: https://img.shields.io/github/release/lukasmalkmus/expensify-go.svg?style=flat-square&ghcache=unused
 [license]: https://opensource.org/licenses/MIT
-[license_badge]: https://img.shields.io/github/license/lukasmalkmus/expensify-go.svg?color=blue&style=flat-square
-[license_status]: https://app.fossa.com/projects/git%2Bgithub.com%2Flukasmalkmus%2Fexpensify-go?ref=badge_shield
-[license_status_badge]: https://app.fossa.com/api/projects/git%2Bgithub.com%2Flukasmalkmus%2Fexpensify-go.svg
-[license_status_large]: https://app.fossa.com/projects/git%2Bgithub.com%2Flukasmalkmus%2Fexpensify-go?ref=badge_large
-[license_status_large_badge]: https://app.fossa.com/api/projects/git%2Bgithub.com%2Flukasmalkmus%2Fexpensify-go.svg?type=large
+[license_badge]: https://img.shields.io/github/license/lukasmalkmus/expensify-go.svg?color=blue&style=flat-square&ghcache=unused
+[license_status]: https://app.fossa.com/projects/git%2Bgithub.com%2Flukasmalkmus%expensify-go
+[license_status_badge]: https://app.fossa.com/api/projects/git%2Bgithub.com%2Flukasmalkmus%expensify-go.svg?type=large&ghcache=unused
