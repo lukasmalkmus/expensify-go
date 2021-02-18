@@ -2,12 +2,12 @@
 
 > An Expensify API client. - by **[Lukas Malkmus]**
 
-[![Build Status][build_badge]][build]
+[![Go Reference][gopkg_badge]][gopkg]
+[![Go Workflow][go_workflow_badge]][go_workflow]
 [![Coverage Status][coverage_badge]][coverage]
 [![Go Report][report_badge]][report]
-[![PkgGoDev][docs_badge]][docs]
+[![Latest Release][release_badge]][release]
 [![License][license_badge]][license]
-[![License Status][license_status_badge]][license_status]
 
 ---
 
